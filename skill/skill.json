@@ -2,7 +2,7 @@
   "name": "moji-weather-equity",
   "version": "1.1.0",
   "description": "墨迹天气会员权益数据开放平台 - 全球天气、AQI、生活指数、短时降水、预警、潮汐",
-  "homepage": "https://github.com/sheldoncopperzh-droid/muwtest",
+  "homepage": "https://github.com/MojiWeather2024/moji-use-weather",
   "bin": "moji-use-weather",
   "skill_file": "SKILL.md",
   "platforms": [

@@ -1,0 +1,14 @@
+{
+  "name": "moji-weather-equity",
+  "owner": {
+    "name": "MojiWeather2024"
+  },
+  "plugins": [
+    {
+      "name": "moji-use-weather",
+      "source": "./",
+      "description": "墨迹天气 CLI — 12 种天气数据查询，全球城市覆盖，内置 AI Skill",
+      "version": "1.1.0"
+    }
+  ]
+}

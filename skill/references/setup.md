@@ -6,7 +6,7 @@ moji-use-weather 是编译后的单文件二进制，零外部依赖。
 
 ```bash
 # macOS / Linux
-curl -fsSL https://raw.githubusercontent.com/sheldoncopperzh-droid/muwtest/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/MojiWeather2024/moji-use-weather/main/install.sh | bash
 
 # 或本地安装
 ./install.sh

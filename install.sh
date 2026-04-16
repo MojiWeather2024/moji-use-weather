@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ─── 配置 ───────────────────────────────────────────
-REPO="sheldoncopperzh-droid/muwtest"
+REPO="MojiWeather2024/moji-use-weather"
 SKILL_NAME="moji-weather-equity"
 DEFAULT_INSTALL_DIR="$HOME/.local/bin"
 SKILL_BACKUP_DIR="$HOME/.ai-skills"
@@ -51,7 +51,7 @@ show_help() {
 moji-use-weather 安装脚本
 
 用法:
-  curl -fsSL https://raw.githubusercontent.com/sheldoncopperzh-droid/muwtest/main/install.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/MojiWeather2024/moji-use-weather/main/install.sh | bash
 
 参数:
   --version <tag>    安装指定版本 (默认: latest)
@@ -62,13 +62,13 @@ moji-use-weather 安装脚本
 
 示例:
   # 安装最新版
-  curl -fsSL https://raw.githubusercontent.com/sheldoncopperzh-droid/muwtest/main/install.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/MojiWeather2024/moji-use-weather/main/install.sh | bash
 
   # 安装指定版本
-  curl -fsSL https://raw.githubusercontent.com/sheldoncopperzh-droid/muwtest/main/install.sh | bash -s -- --version v1.2.0
+  curl -fsSL https://raw.githubusercontent.com/MojiWeather2024/moji-use-weather/main/install.sh | bash -s -- --version v1.2.0
 
   # 卸载
-  curl -fsSL https://raw.githubusercontent.com/sheldoncopperzh-droid/muwtest/main/install.sh | bash -s -- --uninstall
+  curl -fsSL https://raw.githubusercontent.com/MojiWeather2024/moji-use-weather/main/install.sh | bash -s -- --uninstall
 EOF
 }
 

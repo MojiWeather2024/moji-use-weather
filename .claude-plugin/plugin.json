@@ -1,0 +1,17 @@
+{
+  "name": "moji-use-weather",
+  "version": "1.1.0",
+  "description": "墨迹天气 CLI — 12 种天气数据查询，全球城市覆盖，内置 AI Skill",
+  "author": {
+    "name": "MojiWeather2024"
+  },
+  "repository": "https://github.com/MojiWeather2024/moji-use-weather",
+  "license": "MIT",
+  "keywords": [
+    "weather",
+    "moji",
+    "天气",
+    "forecast",
+    "aqi"
+  ]
+}

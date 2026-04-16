@@ -13,7 +13,7 @@
 .PARAMETER SkillOnly
     仅注册 Skill，不下载二进制
 .EXAMPLE
-    irm https://raw.githubusercontent.com/sheldoncopperzh-droid/muwtest/main/install.ps1 | iex
+    irm https://raw.githubusercontent.com/MojiWeather2024/moji-use-weather/main/install.ps1 | iex
 .EXAMPLE
     .\install.ps1 -Version v1.2.0
 .EXAMPLE
@@ -30,7 +30,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 # ─── 配置 ───────────────────────────────────────────
-$Repo = "sheldoncopperzh-droid/muwtest"
+$Repo = "MojiWeather2024/moji-use-weather"
 $SkillName = "moji-weather-equity"
 $AssetName = "moji-use-weather-win-x64.zip"
 if (-not $InstallDir) {

@@ -2,41 +2,86 @@
 
 墨迹天气 CLI — 12 种天气数据查询，零外部依赖，单文件二进制，开箱即用。
 
-支持实况天气、多日预报、空气质量、生活指数、短时降水、天气预警、历史天气、潮汐、限行等查询，覆盖全球城市。
+支持实况天气、多日预报、空气质量、生活指数、短时降水、天气预警、历史天气、潮汐、限行等查询，覆盖全球城市。内置 AI Skill，可与 Claude Code、Kiro、Codex、OpenClaw、OpenCode 等 AI 编程助手无缝集成。
 
 ## 特性
 
 - 🚀 单文件二进制，无需 Node/Python/Java 等运行时
 - 🌍 支持全球城市名或经纬度定位
 - 📊 12 种天气数据接口
-- 🤖 内置 AI Skill，支持 Claude Code / Kiro / OpenClaw / OpenCode
+- 🤖 内置 AI Skill，支持 Claude Code / Kiro / Codex / OpenClaw / OpenCode
 - 🔑 匿名免费试用，零门槛上手
 
-## 快速安装
+## 安装
 
-### macOS / Linux
+### Claude Code
+
+```
+/plugin marketplace add MojiWeather2024/moji-use-weather
+/plugin install moji-use-weather@moji-weather-equity
+```
+
+或通过 npx：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/sheldoncopperzh-droid/muwtest/main/install.sh | bash
+npx skills add git@github.com:MojiWeather2024/moji-use-weather.git
 ```
 
-### Windows (PowerShell)
+### Kiro
+
+在 Kiro 对话中输入：
+
+```
+安装 moji-weather-equity skill，来源 https://github.com/MojiWeather2024/moji-use-weather
+```
+
+或手动将 `skill/` 目录复制到 `~/.kiro/skills/moji-weather-equity/`。
+
+### Codex
+
+在 Codex 聊天中输入：
+
+```
+$skill-installer https://github.com/MojiWeather2024/moji-use-weather/tree/main/skill
+```
+
+### 其他 AI 助手
+
+让你的 AI 助手执行：
+
+```
+安装 moji-weather-equity skill，来源 https://github.com/MojiWeather2024/moji-use-weather
+```
+
+也可以手动将 `skill/` 目录复制到对应平台的 skills 目录中。
+
+### 脚本安装（CLI 二进制 + Skill 一键部署）
+
+脚本会自动下载 CLI 二进制并将 Skill 注册到所有已安装的 AI 编程助手平台。
+
+**macOS / Linux**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/MojiWeather2024/moji-use-weather/main/install.sh | bash
+```
+
+**Windows (PowerShell)**
 
 ```powershell
-irm https://raw.githubusercontent.com/sheldoncopperzh-droid/muwtest/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/MojiWeather2024/moji-use-weather/main/install.ps1 | iex
 ```
 
-### 安装选项
+**更多选项**
 
 ```bash
 # 安装指定版本
-curl -fsSL https://raw.githubusercontent.com/sheldoncopperzh-droid/muwtest/main/install.sh | bash -s -- --version v1.0.0
+curl -fsSL https://raw.githubusercontent.com/MojiWeather2024/moji-use-weather/main/install.sh | bash -s -- --version v1.0.0
 
 # 仅注册 AI Skill（不下载二进制）
-curl -fsSL https://raw.githubusercontent.com/sheldoncopperzh-droid/muwtest/main/install.sh | bash -s -- --skill-only
+curl -fsSL https://raw.githubusercontent.com/MojiWeather2024/moji-use-weather/main/install.sh | bash -s -- --skill-only
 
 # 卸载
-curl -fsSL https://raw.githubusercontent.com/sheldoncopperzh-droid/muwtest/main/install.sh | bash -s -- --uninstall
+curl -fsSL https://raw.githubusercontent.com/MojiWeather2024/moji-use-weather/main/install.sh | bash -s -- --uninstall
 ```
 
 ## 快速开始
@@ -130,14 +175,15 @@ moji-use-weather claim <snsidKey>
 
 ## AI Skill 集成
 
-安装脚本会自动将天气 Skill 注册到已安装的 AI 编程助手平台：
+安装后，Skill 会自动注册到已安装的 AI 编程助手平台：
 
-| 平台 | Skill 目录 |
-|------|-----------|
-| Claude Code | `~/.claude/skills/moji-weather-equity/` |
-| Kiro | `~/.kiro/skills/moji-weather-equity/` |
-| OpenClaw | `~/.openclaw/skills/moji-weather-equity/` |
-| OpenCode | `~/.opencode/skills/moji-weather-equity/` |
+| 平台 | 安装方式 | Skill 目录 |
+|------|---------|-----------|
+| Claude Code | `/plugin marketplace add` 或脚本安装 | `~/.claude/skills/moji-weather-equity/` |
+| Kiro | 对话安装或脚本安装 | `~/.kiro/skills/moji-weather-equity/` |
+| Codex | `$skill-installer` | 项目内 `.codex/skills/` |
+| OpenClaw | 脚本安装 | `~/.openclaw/skills/moji-weather-equity/` |
+| OpenCode | 脚本安装 | `~/.opencode/skills/moji-weather-equity/` |
 
 注册后，在对话中直接说"北京天气怎么样"、"明天要带伞吗"等自然语言即可触发天气查询。
 
@@ -149,6 +195,13 @@ moji-use-weather claim <snsidKey>
 | macOS | x64 (Intel) | `moji-use-weather-darwin-x64.tar.gz` |
 | Linux | x64 | `moji-use-weather-linux-x64.tar.gz` |
 | Windows | x64 | `moji-use-weather-win-x64.zip` |
+
+## Contributing
+
+欢迎贡献！无论是 Bug 报告、新功能建议还是 Pull Request，都非常感谢。
+
+- 发现问题或过时信息？请提 Issue。天气数据 API 变化频繁，保持更新需要社区的力量。
+- 有改进建议？欢迎提 PR，请附上简要说明。
 
 ## License
 
