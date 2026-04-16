@@ -1,0 +1,20 @@
+{
+  "name": "moji-weather-equity",
+  "version": "1.1.0",
+  "description": "墨迹天气会员权益数据开放平台 - 全球天气、AQI、生活指数、短时降水、预警、潮汐",
+  "homepage": "https://github.com/sheldoncopperzh-droid/muwtest",
+  "bin": "moji-use-weather",
+  "skill_file": "SKILL.md",
+  "platforms": [
+    { "name": "claude-code", "config_dir": ".claude", "skill_dir": ".claude/skills" },
+    { "name": "openclaw", "config_dir": ".openclaw", "skill_dir": ".openclaw/skills" },
+    { "name": "opencode", "config_dir": ".opencode", "skill_dir": ".opencode/skills" },
+    { "name": "kiro", "config_dir": ".kiro", "skill_dir": ".kiro/skills" }
+  ],
+  "env": {
+    "required": [],
+    "optional": ["MOJI_WEATHER_SNSID_KEY"],
+    "config_dir": ".openclaw",
+    "config_file": ".env"
+  }
+}

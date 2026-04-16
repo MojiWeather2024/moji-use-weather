@@ -1,0 +1,6 @@
+.env
+__pycache__/
+*.pyc
+logs/
+dist/
+data/monitor_tasks.json

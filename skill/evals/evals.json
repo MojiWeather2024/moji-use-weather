@@ -1,0 +1,84 @@
+{
+  "name": "moji-weather-equity",
+  "description": "Equity CLI Skill evals - 验证天气查询的意图识别和接口选择",
+  "evals": [
+    {
+      "id": "0",
+      "name": "穿衣建议应使用 index 接口",
+      "input": "北京今天穿什么",
+      "expected_behavior": "调用 moji-use-weather index 北京，返回穿衣指数建议，而非调用 now 只返回温度",
+      "expected_commands": ["moji-use-weather index 北京"],
+      "tags": ["intent", "index"]
+    },
+    {
+      "id": "1",
+      "name": "近期降水应优先 shortterm",
+      "input": "明天下午会不会下雨",
+      "expected_behavior": "明天不在 shortterm 2小时范围内，应使用 forecast 查看降水概率",
+      "expected_commands": ["moji-use-weather forecast"],
+      "tags": ["intent", "forecast", "time-reasoning"]
+    },
+    {
+      "id": "2",
+      "name": "历史天气日期解析",
+      "input": "去年情人节上海多少度",
+      "expected_behavior": "解析为 2025年2月14日，调用 history 接口参数 20250214",
+      "expected_commands": ["moji-use-weather history 上海 20250214"],
+      "tags": ["intent", "history", "date-parsing"]
+    },
+    {
+      "id": "3",
+      "name": "无密钥引导流程",
+      "input": "查一下北京天气",
+      "precondition": "未配置 MOJI_WEATHER_APP_KEY（删除 ~/.openclaw/.env）",
+      "expected_behavior": "收到 NO_API_KEY 错误后，引导用户选择免费试用或注册账号，而非直接报错退出",
+      "expected_commands": ["moji-use-weather trial"],
+      "tags": ["auth", "error-handling"]
+    },
+    {
+      "id": "4",
+      "name": "复合查询 - 出行规划",
+      "input": "周末去三亚玩需要准备什么",
+      "expected_behavior": "组合调用 forecast + index + aqi（可选 tide），给出综合建议而非只返回单一接口数据",
+      "expected_commands": [
+        "moji-use-weather forecast 三亚",
+        "moji-use-weather index 三亚",
+        "moji-use-weather aqi 三亚"
+      ],
+      "tags": ["composite", "multi-api"]
+    },
+    {
+      "id": "5",
+      "name": "马上下雨用 shortterm",
+      "input": "接下来一小时会不会下雨",
+      "expected_behavior": "1小时在 shortterm 2小时范围内，应使用 shortterm 接口，建议用坐标",
+      "expected_commands": ["moji-use-weather shortterm"],
+      "tags": ["intent", "shortterm", "time-reasoning"]
+    },
+    {
+      "id": "6",
+      "name": "AQI 结果需带解读",
+      "input": "广州空气质量怎么样",
+      "expected_behavior": "调用 aqi 接口后，按解读规则说明 AQI 等级含义和行动建议，不能只返回数字",
+      "expected_commands": ["moji-use-weather aqi 广州"],
+      "tags": ["interpretation", "aqi"]
+    },
+    {
+      "id": "7",
+      "name": "限行查询",
+      "input": "今天北京限几号",
+      "expected_behavior": "调用 restrict 接口返回限行尾号",
+      "expected_commands": ["moji-use-weather restrict 北京"],
+      "tags": ["intent", "restrict"]
+    },
+    {
+      "id": "8",
+      "name": "试用模式接口限制",
+      "input": "查一下北京空气质量",
+      "precondition": "仅完成 trial 注册（匿名试用模式）",
+      "expected_behavior": "aqi 不在试用支持范围，应提示用户注册账号解锁全功能",
+      "expected_commands": ["moji-use-weather aqi 北京"],
+      "tags": ["auth", "trial-limit"]
+    }
+  ]
+}
