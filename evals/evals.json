@@ -1,5 +1,5 @@
 {
-  "name": "moji-weather-equity",
+  "name": "moji-use-weather",
   "description": "Equity CLI Skill evals - 验证天气查询的意图识别和接口选择",
   "evals": [
     {

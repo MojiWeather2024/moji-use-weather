@@ -3,7 +3,7 @@ set -euo pipefail
 
 # ─── 配置 ───────────────────────────────────────────
 REPO="MojiWeather2024/moji-use-weather"
-SKILL_NAME="moji-weather-equity"
+SKILL_NAME="moji-use-weather"
 DEFAULT_INSTALL_DIR="$HOME/.local/bin"
 SKILL_BACKUP_DIR="$HOME/.ai-skills"
 ENV_DIR="$HOME/.openclaw"
@@ -211,17 +211,17 @@ ensure_path() {
 
 # ─── Skill 目录中需要下载的文件列表 ─────────────────
 SKILL_FILES=(
-  "skill/SKILL.md"
-  "skill/skill.json"
-  "skill/references/setup.md"
-  "skill/references/api-realtime.md"
-  "skill/references/api-forecast.md"
-  "skill/references/api-life.md"
-  "skill/references/api-special.md"
-  "skill/references/interpretation.md"
-  "skill/references/troubleshooting.md"
-  "skill/examples/usage-patterns.md"
-  "skill/evals/evals.json"
+  "SKILL.md"
+  "skill.json"
+  "references/setup.md"
+  "references/api-realtime.md"
+  "references/api-forecast.md"
+  "references/api-life.md"
+  "references/api-special.md"
+  "references/interpretation.md"
+  "references/troubleshooting.md"
+  "examples/usage-patterns.md"
+  "evals/evals.json"
 )
 
 # ─── 注册 Skill 到各平台 ─────────────────────────────
@@ -238,7 +238,7 @@ register_skills() {
   info "下载 Skill 定义 (分层文档)..."
   local download_ok=true
   for rel_path in "${SKILL_FILES[@]}"; do
-    local target_path="${skill_root}/${rel_path#skill/}"
+    local target_path="${skill_root}/${rel_path}"
     mkdir -p "$(dirname "$target_path")"
     if ! curl -fsSL -o "$target_path" "${base_url}/${rel_path}" 2>/dev/null; then
       # 回退到 main 分支

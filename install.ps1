@@ -31,7 +31,7 @@ $ErrorActionPreference = "Stop"
 
 # ─── 配置 ───────────────────────────────────────────
 $Repo = "MojiWeather2024/moji-use-weather"
-$SkillName = "moji-weather-equity"
+$SkillName = "moji-use-weather"
 $AssetName = "moji-use-weather-win-x64.zip"
 if (-not $InstallDir) {
     $InstallDir = Join-Path $env:LOCALAPPDATA "moji-use-weather"
@@ -146,23 +146,62 @@ function Set-UserPath {
     Write-Warn "新打开的终端会自动生效，当前终端已临时生效"
 }
 
+# ─── Skill 目录中需要下载的文件列表 ─────────────────
+$SkillFiles = @(
+    "SKILL.md"
+    "skill.json"
+    "references/setup.md"
+    "references/api-realtime.md"
+    "references/api-forecast.md"
+    "references/api-life.md"
+    "references/api-special.md"
+    "references/interpretation.md"
+    "references/troubleshooting.md"
+    "examples/usage-patterns.md"
+    "evals/evals.json"
+)
+
 # ─── 注册 Skill 到各平台 ─────────────────────────────
 function Register-Skills {
-    $skillUrl = "https://raw.githubusercontent.com/$Repo/$($script:SkillVersion)/SKILL.md"
-    Write-Info "下载 Skill 定义..."
+    $branch = if ($script:SkillVersion) { $script:SkillVersion } else { "main" }
+    $baseUrl = "https://raw.githubusercontent.com/$Repo/$branch"
 
-    try {
-        $skillContent = Invoke-WebRequest -Uri $skillUrl -UseBasicParsing | Select-Object -ExpandProperty Content
-    } catch {
-        # 回退到 main 分支
-        $skillUrl = "https://raw.githubusercontent.com/$Repo/main/SKILL.md"
+    # 下载完整 skill 目录到临时位置
+    $tmpSkill = Join-Path ([System.IO.Path]::GetTempPath()) "moji-skill-tmp"
+    if (Test-Path $tmpSkill) { Remove-Item $tmpSkill -Recurse -Force }
+    $skillRoot = Join-Path $tmpSkill $SkillName
+    New-Item -ItemType Directory -Path $skillRoot -Force | Out-Null
+
+    Write-Info "下载 Skill 定义 (分层文档)..."
+    foreach ($relPath in $SkillFiles) {
+        $targetPath = Join-Path $skillRoot $relPath
+        $targetDir = Split-Path $targetPath -Parent
+        if (-not (Test-Path $targetDir)) {
+            New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+        }
+        $url = "$baseUrl/$relPath"
         try {
-            $skillContent = Invoke-WebRequest -Uri $skillUrl -UseBasicParsing | Select-Object -ExpandProperty Content
+            Invoke-WebRequest -Uri $url -OutFile $targetPath -UseBasicParsing -ErrorAction Stop
         } catch {
-            Write-Err "无法下载 SKILL.md: $_"
-            return
+            # 回退到 main 分支
+            $fallbackUrl = "https://raw.githubusercontent.com/$Repo/main/$relPath"
+            try {
+                Invoke-WebRequest -Uri $fallbackUrl -OutFile $targetPath -UseBasicParsing -ErrorAction Stop
+            } catch {
+                Write-Warn "无法下载 $relPath，跳过"
+            }
         }
     }
+
+    # 校验核心文件
+    $coreFile = Join-Path $skillRoot "SKILL.md"
+    if (-not (Test-Path $coreFile)) {
+        Write-Err "核心文件 SKILL.md 下载失败"
+        Remove-Item $tmpSkill -Recurse -Force
+        return
+    }
+    $fileCount = (Get-ChildItem $skillRoot -Recurse -File).Count
+    Write-Ok "Skill 文件下载完成 ($fileCount 个文件)"
 
     Write-Info "扫描已安装的智能体平台..."
     Write-Host ""
@@ -171,14 +210,17 @@ function Register-Skills {
     foreach ($platform in $Platforms) {
         $configPath = Join-Path $HOME $platform.ConfigDir
         $skillPath = Join-Path $HOME $platform.SkillDir
-        $skillFile = Join-Path $skillPath "$SkillName.md"
 
         if (Test-Path $configPath) {
-            if (-not (Test-Path $skillPath)) {
-                New-Item -ItemType Directory -Path $skillPath | Out-Null
-            }
-            Set-Content -Path $skillFile -Value $skillContent -Encoding UTF8
-            Write-Ok "  $($platform.Name) -> ~\$($platform.SkillDir)\$SkillName.md"
+            # 清理旧的单文件格式
+            $oldFile = Join-Path $skillPath "$SkillName.md"
+            if (Test-Path $oldFile) { Remove-Item $oldFile -Force }
+            # 安装完整目录
+            $destDir = Join-Path $skillPath $SkillName
+            if (Test-Path $destDir) { Remove-Item $destDir -Recurse -Force }
+            New-Item -ItemType Directory -Path $skillPath -Force | Out-Null
+            Copy-Item $skillRoot $destDir -Recurse
+            Write-Ok "  $($platform.Name) -> ~\$($platform.SkillDir)\$SkillName\"
             $registered++
         } else {
             Write-Host "  " -NoNewline
@@ -188,18 +230,22 @@ function Register-Skills {
     }
 
     # 通用备份
-    if (-not (Test-Path $SkillBackupDir)) {
-        New-Item -ItemType Directory -Path $SkillBackupDir | Out-Null
-    }
-    Set-Content -Path (Join-Path $SkillBackupDir "$SkillName.md") -Value $skillContent -Encoding UTF8
-    Write-Ok "  通用备份 -> ~\.ai-skills\$SkillName.md"
+    $backupOldFile = Join-Path $SkillBackupDir "$SkillName.md"
+    if (Test-Path $backupOldFile) { Remove-Item $backupOldFile -Force }
+    $backupDir = Join-Path $SkillBackupDir $SkillName
+    if (Test-Path $backupDir) { Remove-Item $backupDir -Recurse -Force }
+    New-Item -ItemType Directory -Path $SkillBackupDir -Force | Out-Null
+    Copy-Item $skillRoot $backupDir -Recurse
+    Write-Ok "  通用备份 -> ~\.ai-skills\$SkillName\"
+
+    Remove-Item $tmpSkill -Recurse -Force
 
     Write-Host ""
     if ($registered -gt 0) {
         Write-Ok "已注册到 $registered 个智能体平台"
     } else {
         Write-Warn "未检测到任何已安装的智能体平台"
-        Write-Info "Skill 已保存到 ~\.ai-skills\$SkillName.md"
+        Write-Info "Skill 已保存到 ~\.ai-skills\$SkillName\"
         Write-Info "您可以手动复制到对应平台的 skills 目录"
     }
 }
@@ -265,20 +311,30 @@ function Invoke-Uninstall {
     $pathList = $currentPath -split ';' | Where-Object { $_ -ne $InstallDir }
     [Environment]::SetEnvironmentVariable("Path", ($pathList -join ';'), "User")
 
-    # 删除各平台 Skill
+    # 删除各平台 Skill（兼容旧单文件和新目录两种格式）
     foreach ($platform in $Platforms) {
         $skillFile = Join-Path $HOME $platform.SkillDir "$SkillName.md"
+        $skillDirPath = Join-Path $HOME $platform.SkillDir $SkillName
         if (Test-Path $skillFile) {
             Remove-Item $skillFile -Force
             Write-Ok "已删除: ~\$($platform.SkillDir)\$SkillName.md"
         }
+        if (Test-Path $skillDirPath) {
+            Remove-Item $skillDirPath -Recurse -Force
+            Write-Ok "已删除: ~\$($platform.SkillDir)\$SkillName\"
+        }
     }
 
-    # 删除通用备份
+    # 删除通用备份（兼容两种格式）
     $backupFile = Join-Path $SkillBackupDir "$SkillName.md"
+    $backupDirPath = Join-Path $SkillBackupDir $SkillName
     if (Test-Path $backupFile) {
         Remove-Item $backupFile -Force
         Write-Ok "已删除: ~\.ai-skills\$SkillName.md"
+    }
+    if (Test-Path $backupDirPath) {
+        Remove-Item $backupDirPath -Recurse -Force
+        Write-Ok "已删除: ~\.ai-skills\$SkillName\"
     }
 
     Write-Host ""

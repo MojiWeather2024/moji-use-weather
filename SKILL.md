@@ -1,5 +1,5 @@
 ---
-name: moji-weather-equity
+name: moji-use-weather
 description: Use when the user wants to check current weather, temperature, forecasts, air quality, or get lifestyle advice like what to wear, whether to bring an umbrella, allergy risk, UV index, exercise suitability, or car wash timing. Also covers minute-level rain predictions, weather alerts, historical weather, traffic restrictions, tides, and sunrise/sunset. Use this skill whenever the user mentions weather, temperature, forecast, AQI, PM2.5, rain, snow, wind, humidity, sunrise, sunset, tides, traffic restrictions, historical weather, weather alerts, or any question about outdoor conditions, even if they don't explicitly say "weather" or "天气".
 homepage: https://www.moji.com
 metadata:

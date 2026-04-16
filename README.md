@@ -18,7 +18,7 @@
 
 ```
 /plugin marketplace add MojiWeather2024/moji-use-weather
-/plugin install moji-use-weather@moji-weather-equity
+/plugin install moji-use-weather@moji-use-weather
 ```
 
 或通过 npx：
@@ -32,17 +32,17 @@ npx skills add git@github.com:MojiWeather2024/moji-use-weather.git
 在 Kiro 对话中输入：
 
 ```
-安装 moji-weather-equity skill，来源 https://github.com/MojiWeather2024/moji-use-weather
+安装 moji-use-weather skill，来源 https://github.com/MojiWeather2024/moji-use-weather
 ```
 
-或手动将 `skill/` 目录复制到 `~/.kiro/skills/moji-weather-equity/`。
+或手动将项目根目录中的 Skill 文件（`SKILL.md`、`references/`、`examples/`）复制到 `~/.kiro/skills/moji-use-weather/`。
 
 ### Codex
 
 在 Codex 聊天中输入：
 
 ```
-$skill-installer https://github.com/MojiWeather2024/moji-use-weather/tree/main/skill
+$skill-installer https://github.com/MojiWeather2024/moji-use-weather/tree/main
 ```
 
 ### 其他 AI 助手
@@ -50,10 +50,10 @@ $skill-installer https://github.com/MojiWeather2024/moji-use-weather/tree/main/s
 让你的 AI 助手执行：
 
 ```
-安装 moji-weather-equity skill，来源 https://github.com/MojiWeather2024/moji-use-weather
+安装 moji-use-weather skill，来源 https://github.com/MojiWeather2024/moji-use-weather
 ```
 
-也可以手动将 `skill/` 目录复制到对应平台的 skills 目录中。
+也可以手动将项目根目录中的 Skill 文件复制到对应平台的 skills 目录中。
 
 ### 脚本安装（CLI 二进制 + Skill 一键部署）
 
@@ -179,11 +179,11 @@ moji-use-weather claim <snsidKey>
 
 | 平台 | 安装方式 | Skill 目录 |
 |------|---------|-----------|
-| Claude Code | `/plugin marketplace add` 或脚本安装 | `~/.claude/skills/moji-weather-equity/` |
-| Kiro | 对话安装或脚本安装 | `~/.kiro/skills/moji-weather-equity/` |
+| Claude Code | `/plugin marketplace add` 或脚本安装 | `~/.claude/skills/moji-use-weather/` |
+| Kiro | 对话安装或脚本安装 | `~/.kiro/skills/moji-use-weather/` |
 | Codex | `$skill-installer` | 项目内 `.codex/skills/` |
-| OpenClaw | 脚本安装 | `~/.openclaw/skills/moji-weather-equity/` |
-| OpenCode | 脚本安装 | `~/.opencode/skills/moji-weather-equity/` |
+| OpenClaw | 脚本安装 | `~/.openclaw/skills/moji-use-weather/` |
+| OpenCode | 脚本安装 | `~/.opencode/skills/moji-use-weather/` |
 
 注册后，在对话中直接说"北京天气怎么样"、"明天要带伞吗"等自然语言即可触发天气查询。
 
